@@ -2,16 +2,14 @@ package com.challenge.vendingmachine.model;
 
 import com.challenge.vendingmachine.validator.FiveMultiple;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Long id;
 
     private double amountAvailable;
@@ -24,11 +22,11 @@ public class Product {
 
     private Long sellerId;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
