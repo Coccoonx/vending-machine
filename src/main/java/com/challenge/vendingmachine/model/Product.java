@@ -1,11 +1,13 @@
 package com.challenge.vendingmachine.model;
 
 import com.challenge.vendingmachine.validator.FiveMultiple;
+import com.challenge.vendingmachine.validator.UniqueProductName;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,10 +16,11 @@ public class Product {
 
     private double amountAvailable;
 
-    // TODO: 02/03/2022 Implements Exception handler in controller
     @FiveMultiple
     private double cost;
 
+    @Column(unique = true)
+//    @UniqueProductName
     private String productName;
 
     private Long sellerId;
@@ -60,5 +63,16 @@ public class Product {
 
     public void setSellerId(Long sellerId) {
         this.sellerId = sellerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", amountAvailable=" + amountAvailable +
+                ", cost=" + cost +
+                ", productName='" + productName + '\'' +
+                ", sellerId=" + sellerId +
+                '}';
     }
 }

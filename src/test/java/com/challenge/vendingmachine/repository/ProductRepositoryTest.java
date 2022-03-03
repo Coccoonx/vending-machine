@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @RunWith(SpringRunner.class)
@@ -35,5 +36,16 @@ public class ProductRepositoryTest {
         Product saved = productRepository.save(p);
 
         assertEquals( p.getCost(), saved.getCost(), 0);
+    }
+
+    @Test
+    public void findByProductName(){
+        Product p = new Product();
+        p.setProductName("Orange");
+        productRepository.save(p);
+
+        Product product = productRepository.findByProductName("Orange");
+
+        assertNotNull( product);
     }
 }
