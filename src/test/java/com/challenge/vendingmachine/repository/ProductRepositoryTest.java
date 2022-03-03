@@ -44,7 +44,7 @@ public class ProductRepositoryTest {
         p.setProductName("Orange");
         productRepository.save(p);
 
-        Product product = productRepository.findByProductName("Orange");
+        Product product = productRepository.findByProductNameIgnoreCase("Orange");
 
         assertNotNull( product);
     }

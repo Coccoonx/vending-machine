@@ -1,9 +1,10 @@
 package com.challenge.vendingmachine.model;
 
 import com.challenge.vendingmachine.validator.FiveMultiple;
-import com.challenge.vendingmachine.validator.UniqueProductName;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -20,7 +21,8 @@ public class Product implements Serializable {
     private double cost;
 
     @Column(unique = true)
-//    @UniqueProductName
+    @NotEmpty(message = "Name may not empty")
+    @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     private String productName;
 
     private Long sellerId;

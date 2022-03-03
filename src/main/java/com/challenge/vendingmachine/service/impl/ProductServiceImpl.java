@@ -1,5 +1,6 @@
 package com.challenge.vendingmachine.service.impl;
 
+import com.challenge.vendingmachine.exception.ProductAlreadyExistException;
 import com.challenge.vendingmachine.exception.ProductNotExistException;
 import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.repository.ProductRepository;
@@ -22,28 +23,32 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public Product create(Product product) {
+    public Product create(Product product) throws ProductAlreadyExistException {
         log.info("Creating product {}", product);
+        if (productRepository.findByProductNameIgnoreCase(product.getProductName()) != null) {
+            throw new ProductAlreadyExistException("Product name " + product.getProductName() + " already exist");
+        }
         return productRepository.save(product);
     }
 
     @Override
-    public Product update(Product product) {
-        if (product == null || product.getId() == null || !productRepository.findById(product.getId()).isPresent())
-            throw new ProductNotExistException();
+    public Product update(Long id, Product product) throws ProductNotExistException {
+        if (id == null || !productRepository.findById(id).isPresent())
+            throw new ProductNotExistException("Invalid id : " + id);
         log.info("Updating product {}", product);
+        product.setId(id);
 
         return productRepository.save(product);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ProductNotExistException {
         Product p = findById(id);
         if (p != null) {
             log.info("Deleting product with id {}", id);
             productRepository.delete(p);
         } else
-            throw new ProductNotExistException();
+            throw new ProductNotExistException("Invalid id: " + id);
 
     }
 
@@ -62,12 +67,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(Long id) {
         log.info("find product by id {}", id);
-        return productRepository.getById(id);
+        if (productRepository.findById(id).isPresent())
+            return productRepository.findById(id).get();
+        else
+            throw new ProductNotExistException("Invalid id: " + id);
     }
 
     @Override
     public Product findByProductName(String productName) {
         log.info("find product by name {}", productName);
-        return productRepository.findByProductName(productName);
+        return productRepository.findByProductNameIgnoreCase(productName);
     }
 }
