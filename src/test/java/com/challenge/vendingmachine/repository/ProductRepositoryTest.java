@@ -86,6 +86,7 @@ public class ProductRepositoryTest {
     @Test
     public void saveMultipleOfFiveCost(){
         Product p = new Product();
+        p.setProductName("Apple");
         p.setCost(15);
         Product saved = productRepository.save(p);
 

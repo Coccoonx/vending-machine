@@ -1,25 +1,23 @@
 package com.challenge.vendingmachine.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Role {
 
     @Id
-    @Column(name = "role_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    @Column(name = "role_id", length = 30)
+    @NotNull
+    @Size(max = 50)
     private String name;
 
-    private Long sellerId;
-
-    public Integer getId() {
-        return id;
+    public Role() {
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public Role(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -28,5 +26,12 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

@@ -1,18 +1,15 @@
-package com.challenge.vendingmachine.model;
+package com.challenge.vendingmachine.service.dto;
 
 import com.challenge.vendingmachine.validator.FiveMultiple;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-@Entity
-public class Product implements Serializable {
+public class ProductDTO implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private Long id;
 
     private double amountAvailable;
@@ -20,13 +17,13 @@ public class Product implements Serializable {
     @FiveMultiple
     private double cost;
 
-    @Column(unique = true)
     @NotEmpty(message = "Name may not be empty")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
     private String productName;
 
-    @ManyToOne
-    private User seller;
+    private Long sellerId;
+
+    private UserDTO seller;
 
     public Long getId() {
         return id;
@@ -60,18 +57,27 @@ public class Product implements Serializable {
         this.productName = productName;
     }
 
-    public User getSeller() {
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public UserDTO getSeller() {
         return seller;
     }
 
-    public void setSeller(User seller) {
+    public void setSeller(UserDTO seller) {
         this.seller = seller;
     }
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductDTO{" +
                 "id=" + id +
+                ", amountAvailable=" + amountAvailable +
                 ", cost=" + cost +
                 ", productName='" + productName + '\'' +
                 ", seller=" + seller +
