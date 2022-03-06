@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,12 +30,15 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity<UserDTO> create(@Valid @RequestBody UserRegistration userRegistration) {
 
         User user = new User();
         user.setUsername(userRegistration.getUsername());
-        user.setPassword(userRegistration.getPassword());
+        user.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
         if(userRegistration.getRoles() != null && !userRegistration.getRoles().isEmpty()){
             user.setRoles(userMapper.rolesFromStrings(userRegistration.getRoles()));
         }
