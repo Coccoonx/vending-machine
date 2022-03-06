@@ -7,6 +7,9 @@ import javax.validation.constraints.Size;
 @Entity
 public class Role {
 
+    public static final String BUYER = "BUYER";
+    public static final String SELLER = "SELLER";
+
     @Id
     @Column(name = "role_id", length = 30)
     @NotNull

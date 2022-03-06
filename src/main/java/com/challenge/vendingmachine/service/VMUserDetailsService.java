@@ -2,6 +2,7 @@ package com.challenge.vendingmachine.service;
 
 import com.challenge.vendingmachine.model.User;
 import com.challenge.vendingmachine.repository.UserRepository;
+import com.challenge.vendingmachine.security.VMUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,7 @@ public class VMUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user != null)
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+            return new VMUserDetails(user);
         else
             throw new UsernameNotFoundException("User " + username + " not found");
     }
