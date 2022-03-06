@@ -1,8 +1,7 @@
 package com.challenge.vendingmachine.controller;
 
-import com.challenge.vendingmachine.model.Role;
 import com.challenge.vendingmachine.security.VMUserDetails;
-import com.challenge.vendingmachine.service.DepositService;
+import com.challenge.vendingmachine.service.BuyerService;
 import com.challenge.vendingmachine.service.UserService;
 import com.challenge.vendingmachine.service.dto.Coin;
 import com.challenge.vendingmachine.service.dto.UserDTO;
@@ -11,22 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/deposit")
 @PreAuthorize("hasAuthority('BUYER')")
-public class DepositController {
+public class BuyerController {
 
     @Autowired
-    private DepositService depositService;
+    private BuyerService buyerService;
 
     @Autowired
     private UserService userService;
@@ -34,14 +27,24 @@ public class DepositController {
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "/deposit", consumes = "application/json")
     public ResponseEntity<UserDTO> addDeposit(
             @AuthenticationPrincipal VMUserDetails principal,
-            @Valid @RequestBody Coin coin){
+            @Valid @RequestBody Coin coin) {
 
         com.challenge.vendingmachine.model.User user = userService.findByUsername(principal.getUsername());
 
-        return ResponseEntity.ok().body(userMapper.toDTO(depositService.deposit(user, coin)));
+        return ResponseEntity.ok().body(userMapper.toDTO(buyerService.deposit(user, coin)));
+
+    }
+
+    @GetMapping("/reset")
+    public ResponseEntity<UserDTO> resetDeposit(
+            @AuthenticationPrincipal VMUserDetails principal) {
+
+        com.challenge.vendingmachine.model.User user = userService.findByUsername(principal.getUsername());
+
+        return ResponseEntity.ok().body(userMapper.toDTO(buyerService.reset(user)));
 
     }
 }

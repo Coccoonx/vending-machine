@@ -6,6 +6,8 @@ import com.challenge.vendingmachine.service.dto.Coin;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public interface DepositService {
+public interface BuyerService {
     User deposit(@NotNull User user, @Valid Coin coin);
+
+    User reset(@NotNull User user);
 }
