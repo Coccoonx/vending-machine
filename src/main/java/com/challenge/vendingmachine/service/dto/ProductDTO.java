@@ -15,7 +15,7 @@ public class ProductDTO implements Serializable {
     private double amountAvailable;
 
     @FiveMultiple
-    private double cost;
+    private long cost;
 
     @NotEmpty(message = "Name may not be empty")
     @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
@@ -41,11 +41,11 @@ public class ProductDTO implements Serializable {
         this.amountAvailable = amountAvailable;
     }
 
-    public double getCost() {
+    public long getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(long cost) {
         this.cost = cost;
     }
 

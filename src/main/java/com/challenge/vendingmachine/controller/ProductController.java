@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,18 +26,21 @@ public class ProductController {
     @Autowired
     private ProductMapper productMapper;
 
+    @PreAuthorize("hasAuthority('SELLER')")
     @PostMapping(consumes = "application/json")
     public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO product) {
         Product p = productService.create(productMapper.toEntity(product));
         return ResponseEntity.ok(productMapper.toDTO(p));
     }
 
+    @PreAuthorize("hasAuthority('SELLER')")
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<ProductDTO> update(@PathVariable("id") Long id, @Valid @RequestBody ProductDTO product) {
         Product p = productService.update(id, productMapper.toEntity( product));
         return ResponseEntity.ok(productMapper.toDTO(p));
     }
 
+    @PreAuthorize("hasAuthority('SELLER')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
         productService.delete(id);

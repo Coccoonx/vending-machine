@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class JwtUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtil.class);
 
 
-    private final String SECRET = "SERVOOSECRETKEY";
+    private final String SECRET = "vending-machine";
 
     public String extractId(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -48,9 +49,13 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+        calendar.add(Calendar.MINUTE, (60 * 6));
+        Date expiryTime = calendar.getTime();
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(now)
+                .setExpiration(expiryTime)
                 .signWith(SignatureAlgorithm.HS256, SECRET).compact();
     }
 

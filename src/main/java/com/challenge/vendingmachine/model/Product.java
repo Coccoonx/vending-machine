@@ -18,7 +18,7 @@ public class Product implements Serializable {
     private double amountAvailable;
 
     @FiveMultiple
-    private double cost;
+    private long cost;
 
     @Column(unique = true)
     @NotEmpty(message = "Name may not be empty")
@@ -44,11 +44,11 @@ public class Product implements Serializable {
         this.amountAvailable = amountAvailable;
     }
 
-    public double getCost() {
+    public long getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(long cost) {
         this.cost = cost;
     }
 

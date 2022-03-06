@@ -28,7 +28,7 @@ public class VMExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler({EntityNotExistException.class, EntityAlreadyExistException.class})
+    @ExceptionHandler({EntityNotExistException.class, EntityAlreadyExistException.class, InsufficientDepositException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleProductExceptions(final RuntimeException ex) {
         Map<String, String> errors = new HashMap<>();

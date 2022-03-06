@@ -8,7 +8,7 @@ public class UserDTO {
 
     private String username;
 
-    private double deposit;
+    private long deposit;
 
     private Set<String> roles;
 
@@ -28,11 +28,11 @@ public class UserDTO {
         this.username = username;
     }
 
-    public double getDeposit() {
+    public long getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(double deposit) {
+    public void setDeposit(long deposit) {
         this.deposit = deposit;
     }
 

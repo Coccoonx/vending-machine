@@ -22,7 +22,7 @@ public class User {
 
     private String password;
 
-    private double deposit;
+    private long deposit;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -56,11 +56,11 @@ public class User {
         this.password = password;
     }
 
-    public double getDeposit() {
+    public long getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(double deposit) {
+    public void setDeposit(long deposit) {
         this.deposit = deposit;
     }
 
