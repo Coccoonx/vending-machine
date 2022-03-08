@@ -1,7 +1,7 @@
 package com.challenge.vendingmachine.controller;
 
-import com.challenge.vendingmachine.service.dto.AuthRequest;
-import com.challenge.vendingmachine.service.dto.JwtResponse;
+import com.challenge.vendingmachine.model.dto.AuthRequest;
+import com.challenge.vendingmachine.model.dto.JwtResponse;
 import com.challenge.vendingmachine.utils.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

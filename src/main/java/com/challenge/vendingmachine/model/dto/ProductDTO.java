@@ -1,9 +1,7 @@
-package com.challenge.vendingmachine.service.dto;
+package com.challenge.vendingmachine.model.dto;
 
 import com.challenge.vendingmachine.validator.FiveMultiple;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;

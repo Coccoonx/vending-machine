@@ -1,4 +1,4 @@
-package com.challenge.vendingmachine.service.dto;
+package com.challenge.vendingmachine.model.dto;
 
 import java.util.Set;
 

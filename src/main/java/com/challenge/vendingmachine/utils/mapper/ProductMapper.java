@@ -1,7 +1,7 @@
-package com.challenge.vendingmachine.service.mapper;
+package com.challenge.vendingmachine.utils.mapper;
 
 import com.challenge.vendingmachine.model.Product;
-import com.challenge.vendingmachine.service.dto.ProductDTO;
+import com.challenge.vendingmachine.model.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,8 +1,8 @@
-package com.challenge.vendingmachine.service.mapper;
+package com.challenge.vendingmachine.utils.mapper;
 
 import com.challenge.vendingmachine.model.Role;
 import com.challenge.vendingmachine.model.User;
-import com.challenge.vendingmachine.service.dto.UserDTO;
+import com.challenge.vendingmachine.model.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

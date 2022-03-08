@@ -1,6 +1,4 @@
-package com.challenge.vendingmachine.service.dto;
-
-import com.challenge.vendingmachine.model.Product;
+package com.challenge.vendingmachine.model.dto;
 
 import java.util.ArrayList;
 import java.util.List;

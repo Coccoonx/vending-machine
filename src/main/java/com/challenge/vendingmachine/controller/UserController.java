@@ -2,9 +2,9 @@ package com.challenge.vendingmachine.controller;
 
 import com.challenge.vendingmachine.model.User;
 import com.challenge.vendingmachine.service.UserService;
-import com.challenge.vendingmachine.service.dto.UserDTO;
-import com.challenge.vendingmachine.service.dto.UserRegistration;
-import com.challenge.vendingmachine.service.mapper.UserMapper;
+import com.challenge.vendingmachine.model.dto.UserDTO;
+import com.challenge.vendingmachine.model.dto.UserRegistration;
+import com.challenge.vendingmachine.utils.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

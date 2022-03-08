@@ -2,8 +2,8 @@ package com.challenge.vendingmachine.controller;
 
 import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.service.ProductService;
-import com.challenge.vendingmachine.service.dto.ProductDTO;
-import com.challenge.vendingmachine.service.mapper.ProductMapper;
+import com.challenge.vendingmachine.model.dto.ProductDTO;
+import com.challenge.vendingmachine.utils.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

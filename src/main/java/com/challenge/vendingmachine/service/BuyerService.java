@@ -2,8 +2,8 @@ package com.challenge.vendingmachine.service;
 
 import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.model.User;
-import com.challenge.vendingmachine.service.dto.BuyResponse;
-import com.challenge.vendingmachine.service.dto.Coin;
+import com.challenge.vendingmachine.model.dto.BuyResponse;
+import com.challenge.vendingmachine.model.dto.Coin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
