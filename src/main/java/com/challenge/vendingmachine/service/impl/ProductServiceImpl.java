@@ -3,6 +3,7 @@ package com.challenge.vendingmachine.service.impl;
 import com.challenge.vendingmachine.exception.EntityAlreadyExistException;
 import com.challenge.vendingmachine.exception.EntityNotExistException;
 import com.challenge.vendingmachine.model.Product;
+import com.challenge.vendingmachine.model.User;
 import com.challenge.vendingmachine.repository.ProductRepository;
 import com.challenge.vendingmachine.repository.UserRepository;
 import com.challenge.vendingmachine.service.ProductService;
@@ -45,7 +46,11 @@ public class ProductServiceImpl implements ProductService {
         log.info("Updating product {}", product);
         product.setId(id);
 
-        if (product.getSeller() != null && product.getSeller().getId() != null && !userRepository.findById(product.getSeller().getId()).isPresent()) {
+        Product existing = productRepository.findById(id).get();
+
+
+        if (product.getSeller() != null && product.getSeller().getId() != null
+                && !existing.getSeller().getId().equals(product.getSeller().getId())) {
             throw new EntityNotExistException("Seller id " + product.getSeller().getId() + " invalid");
         }
 
