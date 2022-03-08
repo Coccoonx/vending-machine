@@ -15,7 +15,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     List<Purchase> findByBuyer(User buyer);
 
-    List<Purchase> findByProduct(User buyer);
+    List<Purchase> findByProduct(Product product);
 
     List<Purchase> findByDate(Date date);
 
