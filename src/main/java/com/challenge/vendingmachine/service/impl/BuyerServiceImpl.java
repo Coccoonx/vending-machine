@@ -15,11 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import static com.challenge.vendingmachine.utils.VMConstants.ACCEPTED_COINS;
+import static com.challenge.vendingmachine.utils.BuyUtils.computeChanges;
 
 @Service
 public class BuyerServiceImpl implements BuyerService {
@@ -90,20 +88,5 @@ public class BuyerServiceImpl implements BuyerService {
         return userRepository.save(user);
     }
 
-    private List<Integer> computeChanges(long balance) {
-        long remaining = balance;
 
-        List<Integer> changes = new ArrayList<>();
-        for (int i = (ACCEPTED_COINS.length - 1); i >= 0; i--) {
-            long occurrence = (remaining % ACCEPTED_COINS[i]);
-            if (occurrence > 0) {
-                remaining = remaining - occurrence * ACCEPTED_COINS[i];
-                while (occurrence > 0) {
-                    changes.add(ACCEPTED_COINS[i]);
-                    occurrence--;
-                }
-            }
-        }
-        return changes;
-    }
 }
