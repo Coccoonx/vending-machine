@@ -4,7 +4,7 @@ import com.challenge.vendingmachine.model.Purchase;
 import com.challenge.vendingmachine.model.dto.PurchaseDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {PurchaseMapper.class, UserMapper.class})
+@Mapper(componentModel = "spring", uses = {ProductMapper.class, UserMapper.class})
 public interface PurchaseMapper {
 
     PurchaseDTO toDTO(Purchase purchase);

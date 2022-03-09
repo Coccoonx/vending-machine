@@ -3,7 +3,7 @@ package com.challenge.vendingmachine.controller;
 import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.service.ProductService;
 import com.challenge.vendingmachine.utils.mapper.ProductMapper;
-import com.challenge.vendingmachine.service.mapper.ProductMapperImpl;
+import com.challenge.vendingmachine.utils.mapper.ProductMapperImpl;
 import com.challenge.vendingmachine.utils.mapper.UserMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -22,7 +22,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

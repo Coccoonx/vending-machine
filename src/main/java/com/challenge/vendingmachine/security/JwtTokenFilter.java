@@ -1,7 +1,9 @@
 package com.challenge.vendingmachine.security;
 
 import com.challenge.vendingmachine.model.User;
+import com.challenge.vendingmachine.model.UserSession;
 import com.challenge.vendingmachine.repository.UserRepository;
+import com.challenge.vendingmachine.service.UserSessionService;
 import com.challenge.vendingmachine.service.VMUserDetailsService;
 import com.challenge.vendingmachine.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         HeaderMapRequestWrapper wrappedRequest = new HeaderMapRequestWrapper(httpServletRequest);

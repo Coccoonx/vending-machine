@@ -58,4 +58,13 @@ public class VMExceptionHandler {
         log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
         return errors;
     }
+
+    @ExceptionHandler({UserSessionExistException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handlUserSessionExistExceptions(final UserSessionExistException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
+        return errors;
+    }
 }
