@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 
     @Autowired
@@ -30,7 +30,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         if (purchase.getId() != null) {
             throw new IllegalArgumentException("Cannot create existing purchase");
         }
-        log.info("Creating purchase {}", purchase);
+        LOGGER.info("Creating purchase {}", purchase);
         return purchaseRepository.save(purchase);
     }
 
@@ -38,7 +38,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     public Purchase update(Long id, Purchase purchase) {
         if (id == null || !purchaseRepository.findById(id).isPresent())
             throw new EntityNotExistException("Invalid purchase id : " + id);
-        log.info("Updating purchase {}", purchase);
+        LOGGER.info("Updating purchase {}", purchase);
         return purchaseRepository.save(purchase);
     }
 
@@ -46,7 +46,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     public void delete(Long id) {
         Purchase p = findById(id);
         if (p != null) {
-            log.info("Deleting product with id {}", id);
+            LOGGER.info("Deleting product with id {}", id);
             purchaseRepository.delete(p);
         } else
             throw new EntityNotExistException("Invalid purchase id: " + id);
@@ -54,19 +54,19 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public List<Purchase> findAll() {
-        log.info("find All Purchase");
+        LOGGER.info("find All Purchase");
         return purchaseRepository.findAll();
     }
 
     @Override
     public Page<Purchase> findAllPaged(Pageable pageable) {
-        log.info("find All Purchase paged");
+        LOGGER.info("find All Purchase paged");
         return purchaseRepository.findAll(pageable);
     }
 
     @Override
     public Purchase findById(Long id) {
-        log.info("find product by id {}", id);
+        LOGGER.info("find product by id {}", id);
         if (purchaseRepository.findById(id).isPresent())
             return purchaseRepository.findById(id).get();
         else
@@ -75,20 +75,20 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public List<Purchase> findByBuyer(User buyer) {
-        log.info("find All by buyer "+ buyer.getUsername());
+        LOGGER.info("find All by buyer "+ buyer.getUsername());
         return purchaseRepository.findByBuyer(buyer);
     }
 
     @Override
     public List<Purchase> findByProduct(Product product) {
-        log.info("find All by product "+ product.getProductName());
+        LOGGER.info("find All by product "+ product.getProductName());
 
         return purchaseRepository.findByProduct(product);
     }
 
     @Override
     public List<Purchase> findByDate(Date date) {
-        log.info("find All by date "+ date);
+        LOGGER.info("find All by date "+ date);
         return purchaseRepository.findByDate(date);
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private ProductRepository productRepository;
@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) throws EntityAlreadyExistException {
-        log.info("Creating product {}", product);
+        LOGGER.info("Creating product {}", product);
         if (productRepository.findByProductNameIgnoreCase(product.getProductName()) != null) {
             throw new EntityAlreadyExistException("Product name " + product.getProductName() + " already exist");
         }
@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     public Product update(Long id, Product product) throws EntityNotExistException {
         if (id == null || !productRepository.findById(id).isPresent())
             throw new EntityNotExistException("Invalid product id : " + id);
-        log.info("Updating product {}", product);
+        LOGGER.info("Updating product {}", product);
         product.setId(id);
 
         Product existing = productRepository.findById(id).get();
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) throws EntityNotExistException {
         Product p = findById(id);
         if (p != null) {
-            log.info("Deleting product with id {}", id);
+            LOGGER.info("Deleting product with id {}", id);
             productRepository.delete(p);
         } else
             throw new EntityNotExistException("Invalid product id: " + id);
@@ -70,19 +70,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        log.info("find All Product");
+        LOGGER.info("find All Product");
         return productRepository.findAll();
     }
 
     @Override
     public Page<Product> findAllPaged(Pageable pageable) {
-        log.info("find All Product paged");
+        LOGGER.info("find All Product paged");
         return productRepository.findAll(pageable);
     }
 
     @Override
     public Product findById(Long id) {
-        log.info("find product by id {}", id);
+        LOGGER.info("find product by id {}", id);
         if (productRepository.findById(id).isPresent())
             return productRepository.findById(id).get();
         else
@@ -91,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findByProductName(String productName) {
-        log.info("find product by name {}", productName);
+        LOGGER.info("find product by name {}", productName);
         return productRepository.findByProductNameIgnoreCase(productName);
     }
 }

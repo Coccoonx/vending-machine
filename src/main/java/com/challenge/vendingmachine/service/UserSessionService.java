@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class UserSessionService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserSessionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionService.class);
 
 
     @Autowired
@@ -20,29 +20,29 @@ public class UserSessionService {
 
 
     public UserSession findbyId(Long id) {
-        log.info("findbyId id: " + id);
+        LOGGER.info("findbyId id: " + id);
         if (userSessionRepository.findById(id).isPresent())
             return userSessionRepository.findById(id).get();
         return null;
     }
 
     public UserSession findByUsername(String username) {
-        log.info("findByUsername username: " + username);
+        LOGGER.info("findByUsername username: " + username);
         return userSessionRepository.findByUsername(username);
     }
 
     public UserSession save(UserSession userSession) {
-        log.info("saving user session: " + userSession);
+        LOGGER.info("saving user session: " + userSession);
         return userSessionRepository.save(userSession);
     }
 
     public List<UserSession> findByActiveTrue() {
-        log.info("findByActiveTrue");
+        LOGGER.info("findByActiveTrue");
         return userSessionRepository.findByActiveTrue();
     }
 
     public Iterable<UserSession> saveAll(List<UserSession> sessions) {
-        log.info("saveAll");
+        LOGGER.info("saveAll");
         return userSessionRepository.saveAll(sessions);
     }
 

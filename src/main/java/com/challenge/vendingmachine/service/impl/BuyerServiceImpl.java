@@ -22,7 +22,7 @@ import static com.challenge.vendingmachine.utils.BuyUtils.computeChanges;
 @Service
 public class BuyerServiceImpl implements BuyerService {
 
-    private static final Logger log = LoggerFactory.getLogger(BuyerServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BuyerServiceImpl.class);
 
 
     @Autowired
@@ -37,7 +37,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public User deposit(User user, Coin coin) {
 
-        log.info("Deposit of {} for {}", coin.getValue(), user.getUsername());
+        LOGGER.info("Deposit of {} for {}", coin.getValue(), user.getUsername());
         long sum = user.getDeposit() + coin.getValue();
         user.setDeposit(sum);
         return userRepository.save(user);
@@ -83,7 +83,7 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Override
     public User reset(User user) {
-        log.info("Reset deposit of {}", user.getUsername());
+        LOGGER.info("Reset deposit of {}", user.getUsername());
         user.setDeposit(0);
         return userRepository.save(user);
     }

@@ -17,14 +17,14 @@ import java.util.Map;
 @RestControllerAdvice
 public class VMExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(VMExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(VMExceptionHandler.class);
 
     @ExceptionHandler({BadCredentialsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handlBadCredentialsExceptions(final BadCredentialsException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", "Invalid credentials");
-        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), "Invalid credentials");
+        LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), "Invalid credentials");
         return errors;
     }
 
@@ -33,7 +33,7 @@ public class VMExceptionHandler {
     public Map<String, String> handleProductExceptions(final RuntimeException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
-        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
+        LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
         return errors;
     }
 
@@ -42,7 +42,7 @@ public class VMExceptionHandler {
     public Map<String, String> handleValidationExceptions(final ValidationException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
-        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
+        LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
         return errors;
     }
 
@@ -55,7 +55,7 @@ public class VMExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
+        LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
         return errors;
     }
 
@@ -64,7 +64,7 @@ public class VMExceptionHandler {
     public Map<String, String> handlUserSessionExistExceptions(final UserSessionExistException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
-        log.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
+        LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());
         return errors;
     }
 }

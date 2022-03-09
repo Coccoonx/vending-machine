@@ -18,7 +18,7 @@ import java.util.List;
 @EnableScheduling
 public class UserSessionCheck {
 
-    private static final Logger log = LoggerFactory.getLogger(UserSessionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserSessionCheck.class);
 
     @Autowired
     private UserSessionService userSessionService;
@@ -28,22 +28,22 @@ public class UserSessionCheck {
 
     @Scheduled(fixedDelay = (10 * 60 * 1000))
     public void updateExpiredUserSession() {
-        log.info("Scheduled update task start. Time : " + new Date());
+        LOGGER.info("Scheduled update task start. Time : " + new Date());
 
         List<UserSession> userSessionList = userSessionService.findByActiveTrue();
 
-        List<UserSession> expiredToken = new ArrayList<>();
+        List<UserSession> expiredSessions = new ArrayList<>();
 
         for (UserSession session : userSessionList) {
             if (jwtUtil.isTokenExpired(session.getCurrentToken())) {
                 session.setActive(false);
-                expiredToken.add(session);
+                expiredSessions.add(session);
             }
         }
-        if (!expiredToken.isEmpty()) {
-            log.info("update of expired session. Count : " + expiredToken.size());
-            userSessionService.saveAll(expiredToken);
+        if (!expiredSessions.isEmpty()) {
+            LOGGER.info("update of expired session. Count : " + expiredSessions.size());
+            userSessionService.saveAll(expiredSessions);
         }
-        log.info("Scheduled update task finish. Time : " + new Date());
+        LOGGER.info("Scheduled update task finish. Time : " + new Date());
     }
 }

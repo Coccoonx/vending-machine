@@ -1,5 +1,6 @@
 package com.challenge.vendingmachine.model.dto;
 
+import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.validator.FiveMultiple;
 
 import javax.validation.constraints.NotEmpty;

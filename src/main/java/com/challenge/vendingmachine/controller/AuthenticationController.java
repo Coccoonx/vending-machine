@@ -30,7 +30,7 @@ import java.util.Map;
 @RequestMapping("auth")
 public class AuthenticationController {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -50,29 +50,29 @@ public class AuthenticationController {
 
         User user = userService.findByUsername(authRequest.getUsername());
 
-        UserSession us = userSessionService.findByUsername(authRequest.getUsername());
+        UserSession userSession = userSessionService.findByUsername(authRequest.getUsername());
         String token = jwtTokenUtil.generateToken(authRequest.getUsername());
-        if (us == null) {
-            us = new UserSession();
-            us.setUserId(user.getId());
-            us.setUsername(user.getUsername());
-            us.setCurrentToken(token);
-            us.setSessionExpiration(jwtTokenUtil.extractExpiration(token));
-            us.setActive(true);
-            userSessionService.save(us);
+        if (userSession == null) {
+            userSession = new UserSession();
+            userSession.setUserId(user.getId());
+            userSession.setUsername(user.getUsername());
+            userSession.setCurrentToken(token);
+            userSession.setSessionExpiration(jwtTokenUtil.extractExpiration(token));
+            userSession.setActive(true);
+            userSessionService.save(userSession);
         } else {
-            if (us.isActive()) {
+            if (userSession.isActive()) {
                 authentication.setAuthenticated(false);
                 throw new UserSessionExistException("There is already an active session using your account");
             } else {
-                us.setCurrentToken(token);
-                us.setSessionExpiration(jwtTokenUtil.extractExpiration(token));
-                us.setActive(true);
-                userSessionService.save(us);
+                userSession.setCurrentToken(token);
+                userSession.setSessionExpiration(jwtTokenUtil.extractExpiration(token));
+                userSession.setActive(true);
+                userSessionService.save(userSession);
             }
         }
 
-        log.info("Login of user {}", authRequest.getUsername());
+        LOGGER.info("Login of user {}", authRequest.getUsername());
         return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
 
     }
@@ -83,12 +83,12 @@ public class AuthenticationController {
 
         Map<String, String> response = new HashMap<>();
 
-        UserSession us = userSessionService.findByUsername(authRequest.getUsername());
-        if (us != null) {
-            us.setActive(false);
-            userSessionService.save(us);
+        UserSession userSession = userSessionService.findByUsername(authRequest.getUsername());
+        if (userSession != null) {
+            userSession.setActive(false);
+            userSessionService.save(userSession);
             authentication.setAuthenticated(false);
-            log.info("Logout of user {}", authRequest.getUsername());
+            LOGGER.info("Logout of user {}", authRequest.getUsername());
             response.put("message", "All sessions cleared for user : "+authRequest.getUsername());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }

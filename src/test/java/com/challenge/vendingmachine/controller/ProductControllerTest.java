@@ -1,7 +1,12 @@
 package com.challenge.vendingmachine.controller;
 
 import com.challenge.vendingmachine.model.Product;
+import com.challenge.vendingmachine.model.dto.ProductDTO;
+import com.challenge.vendingmachine.repository.UserRepository;
 import com.challenge.vendingmachine.service.ProductService;
+import com.challenge.vendingmachine.service.UserService;
+import com.challenge.vendingmachine.service.VMUserDetailsService;
+import com.challenge.vendingmachine.utils.JwtUtil;
 import com.challenge.vendingmachine.utils.mapper.ProductMapper;
 import com.challenge.vendingmachine.utils.mapper.ProductMapperImpl;
 import com.challenge.vendingmachine.utils.mapper.UserMapper;
@@ -13,6 +18,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,21 +30,19 @@ import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProductController.class)
-@ContextConfiguration(classes = {
-        ProductMapperImpl.class,
-        UserMapper.class,
-})
 public class ProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     ProductMapper productMapper;
 
     @Autowired
@@ -46,6 +50,18 @@ public class ProductControllerTest {
 
     @MockBean
     ProductService productService;
+
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    UserService userService;
+
+    @MockBean
+    JwtUtil jwtUtil;
+
+    @MockBean
+    VMUserDetailsService vmUserDetailsService;
 
     ArrayList<Product> products;
 
@@ -76,7 +92,9 @@ public class ProductControllerTest {
 
     @Test
     public void testGetAll_Success() throws Exception {
-        Mockito.when(productService.findAll()).thenReturn(products);
+        when(productService.findAll()).thenReturn(products);
+        when(productMapper.toDTO(any(Product.class))).thenReturn(new ProductDTO());
+
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/products")
@@ -94,7 +112,8 @@ public class ProductControllerTest {
         product.setProductName("Banana");
         product.setCost(20);
         product.setAmountAvailable(25);
-        Mockito.when(productService.create(product)).thenReturn(product);
+        when(productService.create(product)).thenReturn(product);
+        when(productMapper.toDTO(product)).thenReturn(new ProductDTO());
 
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/products")
@@ -115,7 +134,7 @@ public class ProductControllerTest {
         one.setProductName("Banana");
         one.setCost(18);
         one.setAmountAvailable(25);
-        Mockito.when(productService.create(one)).thenReturn(one);
+        when(productService.create(one)).thenReturn(one);
 
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/products")

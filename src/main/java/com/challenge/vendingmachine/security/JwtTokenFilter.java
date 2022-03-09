@@ -53,12 +53,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = vmUserDetailsService.loadUserByUsername(id);
 
-//            System.out.println("before test " + userDetails.toString());
             if (jwtUtil.validateToken(token, userDetails)) {
 
-//                System.out.println("after test");
                 User user = userRepository.findByUsername(id);
-//                System.out.println(user.toString());
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
