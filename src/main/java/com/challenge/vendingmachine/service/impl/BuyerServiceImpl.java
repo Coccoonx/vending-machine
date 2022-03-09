@@ -57,17 +57,17 @@ public class BuyerServiceImpl implements BuyerService {
             throw new InsufficientDepositException("Insufficient Deposit: need a deposit of " + balance);
         }
 
+        long previousDeposit = user.getDeposit();
+        long totalSpent = quantity * product.getCost();
+        long balance = previousDeposit - totalSpent;
+
         Purchase purchase = new Purchase();
         purchase.setDate(new Date());
         purchase.setBuyer(user);
         purchase.setProduct(product);
         purchase.setQuantity(quantity);
-
+        purchase.setSpent(totalSpent);
         purchaseRepository.save(purchase);
-
-        long previousDeposit = user.getDeposit();
-        long totalSpent = quantity * product.getCost();
-        long balance = previousDeposit - totalSpent;
 
         user.setDeposit(balance);
         userRepository.save(user);

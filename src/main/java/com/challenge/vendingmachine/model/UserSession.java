@@ -57,4 +57,11 @@ public class UserSession {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public String toString() {
+        return "UserSession{" +
+                "username='" + username + '\'' +
+                '}';
+    }
 }

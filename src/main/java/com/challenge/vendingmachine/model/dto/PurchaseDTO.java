@@ -11,9 +11,11 @@ public class PurchaseDTO implements Serializable {
 
     private int quantity;
 
-    private ProductDTO productDto;
+    private long spent;
 
-    private UserDTO buyerDto;
+    private ProductDTO product;
+
+    private UserDTO buyer;
 
     public Long getId() {
         return id;
@@ -39,19 +41,27 @@ public class PurchaseDTO implements Serializable {
         this.quantity = quantity;
     }
 
-    public ProductDTO getProductDto() {
-        return productDto;
+    public long getSpent() {
+        return spent;
     }
 
-    public void setProductDto(ProductDTO productDto) {
-        this.productDto = productDto;
+    public void setSpent(long spent) {
+        this.spent = spent;
     }
 
-    public UserDTO getBuyerDto() {
-        return buyerDto;
+    public ProductDTO getProduct() {
+        return product;
     }
 
-    public void setBuyerDto(UserDTO buyerDto) {
-        this.buyerDto = buyerDto;
+    public void setProduct(ProductDTO product) {
+        this.product = product;
+    }
+
+    public UserDTO getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(UserDTO buyer) {
+        this.buyer = buyer;
     }
 }

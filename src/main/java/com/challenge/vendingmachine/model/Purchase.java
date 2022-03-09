@@ -17,6 +17,8 @@ public class Purchase implements Serializable {
 
     private int quantity;
 
+    private long spent;
+
     @ManyToOne
     @NotNull
     private Product product;
@@ -63,5 +65,13 @@ public class Purchase implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public long getSpent() {
+        return spent;
+    }
+
+    public void setSpent(long spent) {
+        this.spent = spent;
     }
 }
