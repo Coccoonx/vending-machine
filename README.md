@@ -2,7 +2,7 @@
 
 This repo shows an implementation of the vending machine challenge provided by MVP Match.
 
-The specs are as follow :
+The specs are as follows :
 
 Design an API for a vending machine, allowing users with a “seller” role to add, update or remove products, while users with a “buyer” role can deposit coins into the machine and make purchases. Your vending machine should only accept 5, 10, 20, 50 and 100 cent coins
 
@@ -11,7 +11,7 @@ Design an API for a vending machine, allowing users with a “seller” role to 
   - Implement product model with amountAvailable, cost (should be in multiples of 5), productName and sellerId fields
   - Implement user model with username, password, deposit and role fields
   - Implement an authentication method (basic, oAuth, JWT or something else, the choice is yours)
-  - All of the endpoints should be authenticated unless stated otherwise
+  - All the endpoints should be authenticated unless stated otherwise
   - Implement CRUD for users (POST /user should not require authentication to allow new user registration)
   - Implement CRUD for a product model (GET can be called by anyone, while POST, PUT and DELETE can be called only by the seller user who created the product)
   - Implement /deposit endpoint so users with a “buyer” role can deposit only 5, 10, 20, 50 and 100 cent coins into their vending machine account (one coin at the time)

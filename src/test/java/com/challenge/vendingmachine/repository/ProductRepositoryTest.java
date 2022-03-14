@@ -5,20 +5,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolationException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @RunWith(SpringRunner.class)
 
 @DataJpaTest
-@SpringBootTest
 public class ProductRepositoryTest {
 
     @Autowired
@@ -26,62 +23,60 @@ public class ProductRepositoryTest {
 
 
     @Test
-    public void saveProduct(){
-        Product p = new Product();
-        p.setProductName("Orange");
-        productRepository.save(p);
+    public void saveProduct_Success(){
+        Product product = new Product();
+        product.setProductName("Orange");
+        productRepository.save(product);
 
-        assertEquals(1, productRepository.findAll().size());
         assertEquals("Orange", productRepository.findAll().get(0).getProductName());
     }
 
     @Test
-    public void findAll(){
-        Product p = new Product();
-        p.setProductName("Orange");
-        productRepository.save(p);
+    public void saveProductDuplicatedName_Failed(){
+        Product product1 = new Product();
+        product1.setProductName("Orange");
+        productRepository.save(product1);
 
-        p = new Product();
-        p.setProductName("Apple");
-        productRepository.save(p);
+        Product product2 = new Product();
+        product2.setProductName("Orange");
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> productRepository.save(product2));
+
+        assertInstanceOf(DataIntegrityViolationException.class, ex);
+    }
+
+    @Test
+    public void findAll(){
+        Product product1 = new Product();
+        product1.setProductName("Orange");
+        productRepository.save(product1);
+
+        Product product2 = new Product();
+        product2.setProductName("Apple");
+        productRepository.save(product2);
 
         assertEquals(2, productRepository.findAll().size());
     }
 
     @Test
     public void findByProductName(){
-        Product p = new Product();
-        p.setProductName("Orange");
-        productRepository.save(p);
-        Product product = productRepository.findByProductNameIgnoreCase("Orange");
+        Product product = new Product();
+        product.setProductName("Orange");
+        productRepository.save(product);
+        Product productSaved = productRepository.findByProductNameIgnoreCase("Orange");
 
-        assertNotNull(product);
-        assertEquals("Orange", product.getProductName());
+        assertEquals("Orange", productSaved.getProductName());
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void avoidNonMultipleOfFive(){
-        Product p = new Product();
-        p.setCost(12);
-        productRepository.save(p);
-    }
-
-    @Test(expected = DataIntegrityViolationException.class)
-    public void avoidNonMultipleDuplicateProductName(){
-        Product p = new Product();
-        p.setCost(15);
-        p.setProductName("Orange");
-        productRepository.save(p);
-
-        p = new Product();
-        p.setCost(10);
-        p.setProductName("Orange");
-        productRepository.save(p);
-
+    public void avoidNonMultipleOfFive_Success(){
+        Product product = new Product();
+        product.setCost(12);
+        productRepository.save(product);
     }
 
     @Test
-    public void saveMultipleOfFiveCost(){
+    public void saveMultipleOfFiveCost_Success(){
         Product p = new Product();
         p.setProductName("Apple");
         p.setCost(15);
