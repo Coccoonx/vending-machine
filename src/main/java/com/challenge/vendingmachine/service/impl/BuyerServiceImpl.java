@@ -1,6 +1,7 @@
 package com.challenge.vendingmachine.service.impl;
 
 import com.challenge.vendingmachine.exception.InsufficientDepositException;
+import com.challenge.vendingmachine.exception.NotEnoughQuantityException;
 import com.challenge.vendingmachine.model.Product;
 import com.challenge.vendingmachine.model.Purchase;
 import com.challenge.vendingmachine.model.User;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 
 import static com.challenge.vendingmachine.utils.BuyUtils.computeChanges;
@@ -45,6 +47,7 @@ public class BuyerServiceImpl implements BuyerService {
 
 
     @Override
+    @Transactional
     public BuyResponse buyProduct(User user, Product product, int quantity) {
 
         if (quantity <= 0) {
@@ -57,9 +60,15 @@ public class BuyerServiceImpl implements BuyerService {
             throw new InsufficientDepositException("Insufficient Deposit: need a deposit of " + balance);
         }
 
+        if (quantity > product.getAmountAvailable())
+            throw new NotEnoughQuantityException("Insufficient quantity available. In Store " + product.getAmountAvailable());
+
+
         long previousDeposit = user.getDeposit();
         long totalSpent = quantity * product.getCost();
         long balance = previousDeposit - totalSpent;
+
+        product.setAmountAvailable(product.getAmountAvailable() - quantity);
 
         Purchase purchase = new Purchase();
         purchase.setDate(new Date());

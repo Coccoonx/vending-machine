@@ -69,25 +69,6 @@ public class ProductControllerTest extends TestBase {
     }
 
 
-    private void createSampleProducts() {
-        Product one = createProduct("Orange", 20, 10);
-        Product two = createProduct("Pineapple", 25, 15);
-        Product three = createProduct("Apple", 5, 12);
-
-        productService.create(one);
-        productService.create(two);
-        productService.create(three);
-    }
-
-    private Product createProduct(String productName, long cost, double amountAvailable) {
-        Product product = new Product();
-        product.setProductName(productName);
-        product.setCost(cost);
-        product.setAmountAvailable(amountAvailable);
-        return product;
-    }
-
-
     @Test
     public void testGetAll_Without_Auth_Success() {
         createSampleProducts();
@@ -156,5 +137,23 @@ public class ProductControllerTest extends TestBase {
                 .statusCode(200);
 
         assertThat(response.extract().jsonPath().getList("$").size(), equalTo(2));
+    }
+
+    private void createSampleProducts() {
+        Product one = createProduct("Orange", 20, 10);
+        Product two = createProduct("Pineapple", 25, 15);
+        Product three = createProduct("Apple", 5, 12);
+
+        productService.create(one);
+        productService.create(two);
+        productService.create(three);
+    }
+
+    private Product createProduct(String productName, long cost, double amountAvailable) {
+        Product product = new Product();
+        product.setProductName(productName);
+        product.setCost(cost);
+        product.setAmountAvailable(amountAvailable);
+        return product;
     }
 }

@@ -21,14 +21,15 @@ public class VMExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handlBadCredentialsExceptions(final BadCredentialsException ex) {
+    public Map<String, String> handleBadCredentialsExceptions(final BadCredentialsException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", "Invalid credentials");
         LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), "Invalid credentials");
         return errors;
     }
 
-    @ExceptionHandler({EntityNotExistException.class, EntityAlreadyExistException.class, InsufficientDepositException.class})
+    @ExceptionHandler({EntityNotExistException.class, EntityAlreadyExistException.class,
+            InsufficientDepositException.class, NotEnoughQuantityException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleProductExceptions(final RuntimeException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -61,7 +62,7 @@ public class VMExceptionHandler {
 
     @ExceptionHandler({UserSessionExistException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> handlUserSessionExistExceptions(final UserSessionExistException ex) {
+    public Map<String, String> handleUserSessionExistExceptions(final UserSessionExistException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
         LOGGER.error("exception from {} cause {} ", ex.getClass().getSimpleName(), ex.getMessage());

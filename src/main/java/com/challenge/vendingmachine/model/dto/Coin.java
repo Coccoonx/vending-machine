@@ -14,6 +14,13 @@ public class Coin {
         this.value = value;
     }
 
+    public Coin() {
+    }
+
+    public Coin(Integer value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         return "Coin{" +

@@ -9,6 +9,14 @@ public class BuyRequest {
     @NotNull
     private Long productId;
 
+    public BuyRequest() {
+    }
+
+    public BuyRequest(Long productId, int quantity) {
+        this.quantity = quantity;
+        this.productId = productId;
+    }
+
     public int getQuantity() {
         return quantity;
     }
