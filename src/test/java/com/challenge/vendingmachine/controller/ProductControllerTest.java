@@ -1,145 +1,160 @@
 package com.challenge.vendingmachine.controller;
 
+import com.challenge.vendingmachine.TestBase;
 import com.challenge.vendingmachine.model.Product;
-import com.challenge.vendingmachine.model.dto.ProductDTO;
-import com.challenge.vendingmachine.repository.UserRepository;
-import com.challenge.vendingmachine.service.ProductService;
-import com.challenge.vendingmachine.service.UserService;
-import com.challenge.vendingmachine.service.VMUserDetailsService;
-import com.challenge.vendingmachine.utils.JwtUtil;
-import com.challenge.vendingmachine.utils.mapper.ProductMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(ProductController.class)
-public class ProductControllerTest {
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @MockBean
-    ProductMapper productMapper;
-
-    @Autowired
-    ObjectMapper mapper;
-
-    @MockBean
-    ProductService productService;
-
-    @MockBean
-    UserRepository userRepository;
-
-    @MockBean
-    UserService userService;
-
-    @MockBean
-    JwtUtil jwtUtil;
-
-    @MockBean
-    VMUserDetailsService vmUserDetailsService;
-
-    ArrayList<Product> products;
+public class ProductControllerTest extends TestBase {
 
     @Before
-    public void init() {
-        products = new ArrayList<>();
-        Product one = new Product();
-        one.setId(1L);
-        one.setProductName("Banana");
-        one.setCost(9);
-        one.setAmountAvailable(25);
-        products.add(one);
-
-        Product two = new Product();
-        two.setId(2L);
-        two.setProductName("Orange");
-        two.setCost(10);
-        two.setAmountAvailable(25);
-        products.add(two);
-
-        Product three = new Product();
-        three.setId(3L);
-        three.setProductName("Pineapple");
-        three.setCost(11);
-        three.setAmountAvailable(25);
-        products.add(three);
+    public void init() throws Exception {
+        setup();
     }
 
     @Test
-    public void testGetAll_Success() throws Exception {
-        when(productService.findAll()).thenReturn(products);
-        when(productMapper.toDTO(any(Product.class))).thenReturn(new ProductDTO());
+    public void testCreateSeller_Success() throws Exception {
+        Product product = createProduct("Banana", 30, 10);
 
+        ValidatableResponse response = preLoadedGivenSeller.given()
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(product))
+                .log()
+                .body()
+                .post("/products")
+                .then()
+                .log()
+                .body()
+                .statusCode(200);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/products")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[2].cost", equalTo(11.0)));
+        assertThat(response.extract().jsonPath().get("productName"), equalTo("Banana"));
+    }
+
+    @Test
+    public void testCreateSellerInvalidCost_Fail() throws Exception {
+        Product product = createProduct("Banana", 22, 10);
+
+        preLoadedGivenSeller.given()
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(product))
+                .log()
+                .body()
+                .post("/products")
+                .then()
+                .log()
+                .body()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testCreateBuyer_Fail() throws Exception {
+        Product product = createProduct("Banana", 30, 10);
+
+        preLoadedGivenBuyer.given()
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(product))
+                .log()
+                .body()
+                .post("/products")
+                .then()
+                .log()
+                .body()
+                .statusCode(403);
     }
 
 
-    @Test
-    public void testCreate_Success() throws Exception {
+    private void createSampleProducts() {
+        Product one = createProduct("Orange", 20, 10);
+        Product two = createProduct("Pineapple", 25, 15);
+        Product three = createProduct("Apple", 5, 12);
+
+        productService.create(one);
+        productService.create(two);
+        productService.create(three);
+    }
+
+    private Product createProduct(String productName, long cost, double amountAvailable) {
         Product product = new Product();
-        product.setId(1L);
-        product.setProductName("Banana");
-        product.setCost(20);
-        product.setAmountAvailable(25);
-        when(productService.create(product)).thenReturn(product);
-        when(productMapper.toDTO(product)).thenReturn(new ProductDTO());
+        product.setProductName(productName);
+        product.setCost(cost);
+        product.setAmountAvailable(amountAvailable);
+        return product;
+    }
 
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/products")
-                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(product));
+    @Test
+    public void testGetAll_Without_Auth_Success() {
+        createSampleProducts();
 
-        mockMvc.perform(mockRequest)
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("$", nullValue()));
-//                .andExpect(jsonPath("$.cost", equalTo(20.0)));
+        ValidatableResponse response = given()
+                .get("/products")
+                .then()
+                .log()
+                .body()
+                .statusCode(200);
+
+        assertThat(response.extract().jsonPath().getList("$").size(), equalTo(3));
     }
 
     @Test
-    public void testCreate_Fail() throws Exception {
-        Product one = new Product();
-        one.setId(1L);
-        one.setProductName("Banana");
-        one.setCost(18);
-        one.setAmountAvailable(25);
-        when(productService.create(one)).thenReturn(one);
+    public void testUpdate_Without_Auth_Fail() throws Exception {
+        createSampleProducts();
+        Product productUpdate = createProduct("Coconuts", 20, 10);
 
+        given()
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(productUpdate))
+                .put("/products/1L")
+                .then()
+                .log()
+                .body()
+                .statusCode(401);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/products")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(one));
-
-        mockMvc.perform(mockRequest)
-                .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.cost", equalTo("Invalid cost: should be multiple of 5")));
     }
 
 
+    @Test
+    public void testUpdate_With_Auth_Success() throws Exception {
+        createSampleProducts();
+        Product productUpdate = createProduct("Coconuts", 20, 10);
+
+        ValidatableResponse response = preLoadedGivenSeller
+                .contentType(ContentType.JSON)
+                .body(objectMapper.writeValueAsString(productUpdate))
+                .put("/products/1")
+                .then()
+                .log()
+                .body()
+                .statusCode(200);
+
+        assertThat(response.extract().jsonPath().get("productName"), equalTo("Coconuts"));
+    }
+
+
+    @Test
+    public void testDelete_With_Auth_Success() {
+        createSampleProducts();
+
+        preLoadedGivenSeller
+                .delete("/products/1")
+                .then()
+                .log()
+                .body()
+                .statusCode(200);
+
+        ValidatableResponse response  = given()
+                .get("/products")
+                .then()
+                .log()
+                .body()
+                .statusCode(200);
+
+        assertThat(response.extract().jsonPath().getList("$").size(), equalTo(2));
+    }
 }

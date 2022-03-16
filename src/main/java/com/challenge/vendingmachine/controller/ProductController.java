@@ -58,7 +58,7 @@ public class ProductController {
         Product p = productService.findById(id);
         User user = userService.findByUsername(principal.getUsername());
 
-        if (!p.getSeller().getId().equals(user.getId()))
+        if (p.getSeller() != null && !p.getSeller().getId().equals(user.getId()))
             throw new IllegalArgumentException("Seller not authorized on product id : " + id);
 
         Product saved = productService.update(id, productMapper.toEntity(product));
@@ -75,7 +75,7 @@ public class ProductController {
         Product p = productService.findById(id);
         User user = userService.findByUsername(principal.getUsername());
 
-        if (!p.getSeller().getId().equals(user.getId()))
+        if (p.getSeller() != null && !p.getSeller().getId().equals(user.getId()))
             throw new IllegalArgumentException("Seller not authorized on product id : " + id);
 
         productService.delete(id);
