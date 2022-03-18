@@ -53,6 +53,9 @@ public class ProductServiceImpl implements ProductService {
                 && !existing.getSeller().getId().equals(product.getSeller().getId())) {
             throw new EntityNotExistException("Seller id " + product.getSeller().getId() + " invalid");
         }
+        if(existing.getSeller() != null){
+            product.setSeller(existing.getSeller());
+        }
 
         return productRepository.save(product);
     }
